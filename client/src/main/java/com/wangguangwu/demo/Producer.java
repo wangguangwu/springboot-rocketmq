@@ -1,5 +1,6 @@
 package com.wangguangwu.demo;
 
+import com.wangguangwu.common.Constants;
 import org.apache.rocketmq.client.exception.MQBrokerException;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
@@ -20,7 +21,7 @@ public class Producer {
             // 创建消息生产者，指定生产者所属的组名
             producer = new DefaultMQProducer("producer-group");
             // 指定 NameServer 地址
-            producer.setNamesrvAddr("121.4.119.252:9876");
+            producer.setNamesrvAddr(Constants.NAME_SERVER);
             // 启动生产者
             producer.start();
 

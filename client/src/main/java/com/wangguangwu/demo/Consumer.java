@@ -1,5 +1,6 @@
 package com.wangguangwu.demo;
 
+import com.wangguangwu.common.Constants;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
 import org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
@@ -18,7 +19,7 @@ public class Consumer {
             // 创建消息消费者
             DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("consumer-group");
             // 指定 NameServer 地址
-            consumer.setNamesrvAddr("121.4.119.252:9876");
+            consumer.setNamesrvAddr(Constants.NAME_SERVER);
             // 指定消费者订阅的主题和标签
             consumer.subscribe("topic", "*");
             // 设置回调函数，编写处理消息的方法
