@@ -2,10 +2,7 @@ package com.wangguangwu.transaction;
 
 import com.wangguangwu.common.Constants;
 import org.apache.rocketmq.client.exception.MQClientException;
-import org.apache.rocketmq.client.producer.DefaultMQProducer;
-import org.apache.rocketmq.client.producer.LocalTransactionState;
-import org.apache.rocketmq.client.producer.TransactionListener;
-import org.apache.rocketmq.client.producer.TransactionMQProducer;
+import org.apache.rocketmq.client.producer.*;
 import org.apache.rocketmq.common.message.Message;
 import org.apache.rocketmq.common.message.MessageExt;
 
@@ -72,7 +69,11 @@ public class Producer {
                 "Hello, transaction.".getBytes());
 
         // 发送消息
+        TransactionSendResult sendSuccessResult = producer.sendMessageInTransaction(message, Boolean.TRUE);
+        System.out.println("执行成功类型，事务执行结果：" + sendSuccessResult);
+
+        TransactionSendResult sendFalseResult = producer.sendMessageInTransaction(message, Boolean.FALSE);
+        System.out.println("执行失败类型，事务执行结果：" + sendFalseResult);
 
     }
-
 }

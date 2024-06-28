@@ -15,7 +15,7 @@ import org.apache.rocketmq.remoting.exception.RemotingException;
  */
 public class Producer {
 
-    public static void main(String[] args) throws RuntimeException {
+    public static void main(String[] args) throws MQClientException, MQBrokerException, RemotingException, InterruptedException {
         DefaultMQProducer producer = null;
         try {
             // 创建消息生产者，指定生产者所属的组名
@@ -31,13 +31,10 @@ public class Producer {
             // 发送消息
             SendResult sendResult = producer.send(message, 10000);
             System.out.println("Produce result:：" + sendResult);
-        } catch (MQClientException | RemotingException | MQBrokerException | InterruptedException e) {
-            e.printStackTrace();
         } finally {
             if (producer != null) {
                 producer.shutdown();
             }
         }
     }
-
 }
