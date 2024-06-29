@@ -1,4 +1,6 @@
-# SpringBoot 集成 RocketMQ
+# rocketmq-demo
+
+项目地址：[rocketmq-demo](https://github.com/wangguangwu/springboot-rocketmq)
 
 # MQ 基本概念
 
