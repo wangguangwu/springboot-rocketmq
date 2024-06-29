@@ -24,6 +24,94 @@
 
 ## 消息事务
 
+## 消息类型
+
+在 RocketMQ 中，不同的消息发送方式满足不同的应用场景和业务需求。以下是同步消息、异步消息、单向消息和批量消息的定义及其适用场景：
+
+### 同步消息（Synchronous Message）
+- **定义**：同步消息是指生产者发送消息后等待服务器返回发送结果的消息发送方式。
+- **适用场景**：适用于对消息可靠性要求较高的业务场景，如重要通知、订单生成等。因为生产者会在发送消息后等待服务器的确认，确保消息已经成功发送到服务器。
+- **示例代码**：
+  ```java
+  DefaultMQProducer producer = new DefaultMQProducer("producer-group");
+  producer.setNamesrvAddr("localhost:9876");
+  producer.start();
+
+  Message message = new Message("topic", "tag", "Hello, RocketMQ".getBytes());
+  SendResult sendResult = producer.send(message);
+  System.out.println("Send Result: " + sendResult);
+
+  producer.shutdown();
+  ```
+
+### 异步消息（Asynchronous Message）
+- **定义**：异步消息是指生产者发送消息后，不等待服务器返回结果，而是通过回调函数处理服务器返回的结果。
+- **适用场景**：适用于对响应时间有要求的业务场景，如用户请求的快速响应。生产者在发送消息后可以立即返回，服务器处理结果通过回调函数异步通知。
+- **示例代码**：
+  ```java
+  DefaultMQProducer producer = new DefaultMQProducer("producer-group");
+  producer.setNamesrvAddr("localhost:9876");
+  producer.start();
+
+  Message message = new Message("topic", "tag", "Hello, RocketMQ".getBytes());
+  producer.send(message, new SendCallback() {
+      @Override
+      public void onSuccess(SendResult sendResult) {
+          System.out.println("Send Success: " + sendResult);
+      }
+
+      @Override
+      public void onException(Throwable e) {
+          e.printStackTrace();
+          System.out.println("Send Failed");
+      }
+  });
+
+  producer.shutdown();
+  ```
+
+### 单向消息（One-way Message）
+- **定义**：单向消息是指生产者只负责发送消息，不等待服务器返回结果，也没有回调函数处理结果。
+- **适用场景**：适用于不需要关心发送结果的业务场景，如日志收集、监控数据上传等。这种方式具有很高的发送速度和吞吐量。
+- **示例代码**：
+  ```java
+  DefaultMQProducer producer = new DefaultMQProducer("producer-group");
+  producer.setNamesrvAddr("localhost:9876");
+  producer.start();
+
+  Message message = new Message("topic", "tag", "Hello, RocketMQ".getBytes());
+  producer.sendOneway(message);
+
+  producer.shutdown();
+  ```
+
+### 批量消息（Batch Message）
+- **定义**：批量消息是指生产者将多条消息打包成一个消息批次发送到服务器。服务器将消息批次拆分并存储。
+- **适用场景**：适用于批量数据处理的业务场景，如批量生成订单、批量用户注册等。批量消息可以提高发送效率和吞吐量，但每个批次的消息大小不能超过4MB。
+- **示例代码**：
+  ```java
+  DefaultMQProducer producer = new DefaultMQProducer("producer-group");
+  producer.setNamesrvAddr("localhost:9876");
+  producer.start();
+
+  List<Message> messages = new ArrayList<>();
+  messages.add(new Message("topic", "tag", "Hello, RocketMQ 1".getBytes()));
+  messages.add(new Message("topic", "tag", "Hello, RocketMQ 2".getBytes()));
+  messages.add(new Message("topic", "tag", "Hello, RocketMQ 3".getBytes()));
+
+  producer.send(messages);
+
+  producer.shutdown();
+  ```
+
+### 总结
+- **同步消息**：发送后等待服务器返回结果，适用于对消息可靠性要求较高的场景。
+- **异步消息**：发送后立即返回，通过回调函数处理结果，适用于对响应时间有要求的场景。
+- **单向消息**：发送后不等待结果也没有回调函数，适用于不关心发送结果的场景。
+- **批量消息**：将多条消息打包成一个批次发送，提高发送效率，适用于批量数据处理的场景。
+
+通过不同的消息发送方式，RocketMQ 能够满足多种业务场景的需求，提供灵活的消息传递方案。
+
 ## 消息分类
 
 根据 Topic，tag，key 等进行分类。
