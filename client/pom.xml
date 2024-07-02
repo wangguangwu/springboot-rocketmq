@@ -15,12 +15,14 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <rocketmq.client.version>5.2.0</rocketmq.client.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.apache.rocketmq</groupId>
             <artifactId>rocketmq-client</artifactId>
+            <version>${rocketmq.client.version}</version>
         </dependency>
     </dependencies>
 </project>
